@@ -82,6 +82,9 @@ def eliminar_evento():
                 else:
                         print("Ese evento no existe. Intente nuevamente.")
 def proximos_eventos():
+        """
+        Mostrar proximos eventos.
+        """
         eventos = Gestor.listado_de_eventos()
         if eventos:
                 for nombre in eventos:
@@ -91,27 +94,32 @@ def proximos_eventos():
                 
 
 def filtrar_eventos():
+        """
+        Menú para filtrar Eventos.
+        El usuario puede ingresar un nombre de Evento para ver las coincidencias, una fecha para ver los Eventos de esa fecha en adelante,
+        una ubicación para ver Eventos en esa zona, e ingresar un numero de aforo para ver Eventos que tengan esa capacidad o más.
+        """
         eventos = Gestor.listado_de_eventos()
         while True:
-            print("\t Filtrar Eventos")
-            print("Filtrar por:")
-            print("1.Nombre")
-            print("2.Fecha")
-            print("3.Ubicación")
-            print("4.Aforo")
-            print("5.Volver al Menú de Usuarios.")
-            op = input("Elija la opción que desea: ")
-            if op == "":
-                op = input("Elija una opción (1-5): ")
-                continue
-            if not op.isdigit():
-                op = input("Debe ingresar un numero: ")
-                continue
-            opcion = int(op)
-            if opcion not in range(1,6):                       
-                print("Opción invalida: Debe ser un número del 1 al 5.")
-                continue
-            break
+                print("\t Filtrar Eventos")
+                print("Filtrar por:")
+                print("1.Nombre")
+                print("2.Fecha")
+                print("3.Ubicación")
+                print("4.Aforo")
+                print("5.Volver al Menú de Usuarios.")
+                op = input("Elija la opción que desea: ")
+                if op == "":
+                        op = input("Elija una opción (1-5): ")
+                        continue
+                if not op.isdigit():
+                        op = input("Debe ingresar un numero: ")
+                        continue
+                opcion = int(op)
+                if opcion not in range(1,6):                       
+                        print("Opción invalida: Debe ser un número del 1 al 5.")
+                        continue
+                break
         if opcion == 1:
                 try:
                         nombre = input("Ingrese el nombre del evento: ")
@@ -120,10 +128,10 @@ def filtrar_eventos():
                 except ValueError as e:
                         print("Error:", e)
                 Gestor.filterby_name(nombre)
-        if opcion == 2:
+        elif opcion == 2:
                 fecha_valida = agregar_fecha_evento()
                 Gestor.filter_by_date(fecha_valida)
-        if opcion == 3:
+        elif opcion == 3:
                 while True:
                         try:
                                 location = input("Ingrese la ubicación del evento (7 a 70 letras, espacios o comas): ")
@@ -133,19 +141,19 @@ def filtrar_eventos():
                         except ValueError as e:
                                 print("Error:", e)
                 Gestor.filter_by_location(location)
-        if opcion == 4:
+        elif opcion == 4:
                 while True:
                         try:
                                 numero = int(input("Ingrese el número de aforo: "))
                                 if numero <= 0:
                                         raise ValueError("El número debe ser mayor a 0.")
-                                break  # Sale del bucle si está todo bien
+                                break  
                         except ValueError as e:
                                 print("Error:", e)
                 Gestor.filterby_participants(numero)
-        if opcion == 5:
-            menu_loggeado()
-            
+        elif opcion == 5:
+                menu_loggeado()
+
 
 def modificar_evento():
         """
@@ -210,42 +218,66 @@ def modificar_evento():
 
 
 def ordenar_eventos(usuario : Participante):
-    while True:
-        print("\tOrdenar Eventos")
-        print("Ordenar por:")
-        print("1.Orden Alfabetico")
-        print("2.Fecha")
-        print("3.Ubicación")
-        print("4.Aforo")
-        print("5.Salir")
-        op = input("Elija la opción que desea: ")
-        if op == "":
-                op = input("Elija una opción (1-5): ")
-                continue
-        if not op.isdigit():
-                op = input("Debe ingresar un numero: ")
-                continue
-        opcion = int(op)
-        if opcion not in range(1,6):                       
-                print("Opción invalida: Debe ser un número del 1 al 5.")
-                continue
-        break
+        """
+        Menú para ordenar los eventos existentes según ciertos criterios.
+        """
+        while True:
+                print("\tOrdenar Eventos")
+                print("Ordenar por:")
+                print("1.Orden Alfabetico")
+                print("2.Fecha")
+                print("3.Ubicación")
+                print("4.Aforo")
+                print("5.Salir")
+                op = input("Elija la opción que desea: ")
+                if op == "":
+                        op = input("Elija una opción (1-5): ")
+                        continue
+                if not op.isdigit():
+                        op = input("Debe ingresar un numero: ")
+                        continue
+                opcion = int(op)
+                if opcion not in range(1,6):                       
+                        print("Opción invalida: Debe ser un número del 1 al 5.")
+                        continue
+                break
         if opcion == 1:
-        usuario.sort_events_alphabetical()
-    if opcion == 2:
-        usuario.sort_events_by_date()
-    if opcion == 3:
-        usuario.sort_events_by_location()
-    if opcion == 4:
-        usuario.sort_events_by_max_participants()
-    if opcion == 5:
-        return
+                usuario.sort_events_alphabetical()
+        elif opcion == 2:
+                usuario.sort_events_by_date()
+        elif opcion == 3:
+                usuario.sort_events_by_location()
+        elif opcion == 4:
+                usuario.sort_events_by_max_participants()
+        elif opcion == 5:
+                return
 
 
 
 def administrar_eventos():
-        nombre_evento = pedir_nombre_evento
+        """
+        Menú para administrar Eventos.
+        Manejado por el Gestor, puede visualizar una lista con la asistencia al Evento, los participantes que están anotados y los que están ausentes.
+        También puede generar un reporte del Evento con los participantes y si asistirán o no.
+        
+        """
+        nombre_evento = pedir_nombre_evento()
         evento = Gestor._eventos[nombre_evento]["Evento"]
         while True:
                 print(f"\tAdministrar Evento {nombre_evento}")
                 print("1.Registro Asistencia")
+                print("2.Lista de Participantes")
+                print("3.Participantes Ausentes")
+                print("4.Generar Reporte")
+                print("5.Volver")
+                opcion = menu_opciones()
+                if opcion == 1:
+                        evento.confirmed_attendance_list()
+                if opcion == 2:
+                        evento.checking_attendance_list()
+                if opcion == 3:
+                        evento.not_confirmed_list()
+                if opcion == 4:
+                        evento.generate_csv_report()
+                if opcion == 5:
+                        break

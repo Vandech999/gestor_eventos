@@ -4,12 +4,12 @@ from commands.modelos.eventos import *
 import random
 import re
 
-
 def menu_loggeado(codigo_usuario):
     """
-    Menú de usuarios ya loggeados.
-    Permite visualizar proximos eventos, ver a los eventos que está anotado,
-    confirmar asistencia a eventos o desanotarse de alguno de estos.
+    Menú al que accede el usuario una vez que pasó el inicio de sesión.
+    Puede interactuar con todos los eventos disponibles, en los que está anotado y en los que no.
+    Puede filtrar y ordenar eventos según ciertos criterios.
+    Puede anotarse, desanotarse y confirmar asistencia a eventos.
     """
     while True:
         usuario = usuarios[codigo_usuario]["Usuario"]
@@ -42,17 +42,21 @@ def menu_loggeado(codigo_usuario):
         elif opcion == 2:
             usuario.mostrar_confirmaciones()
         elif opcion == 3:
-            pass
+            filtrar_eventos()
         elif opcion == 4:
-            pass
+            ordenar_eventos(usuario)
         elif opcion == 5:
-            pass
+            nombre = pedir_nombre_evento()
+            usuario.go_to_an_event(nombre)
         elif opcion == 6:
-            pass
+            nombre_evento = pedir_nombre_evento()
+            usuario.confirm_attendance(nombre_evento)
         elif opcion == 7:
-            pass
+            nombre = pedir_nombre_evento()
+            usuario.not_going_event(nombre)
         elif opcion == 8:
-            menu_principal()
+            return
+
 
 
 
@@ -70,7 +74,8 @@ def menu_gestor_de_eventos():
         print("2.Modificar Evento")
         print("3.Eliminar Evento")
         print("4.Lista de Eventos")
-        print("5.Salir")
+        print("5.Administrar Evento")
+        print("6.Salir")
         opcion = menu_opciones()
         if opcion == 1:
                 agregar_evento()
@@ -81,6 +86,8 @@ def menu_gestor_de_eventos():
         elif opcion == 4:
             Gestor.listado_de_eventos()
         elif opcion == 5:
+            administrar_eventos()
+        elif opcion == 6:
             print("Volviendo al menú principal...")
             menu_principal()
 
