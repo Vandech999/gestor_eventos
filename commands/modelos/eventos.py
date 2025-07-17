@@ -199,6 +199,7 @@ def modificar_evento():
                                                         nueva_ubicacion = input("Ingrese la nueva ubicación que quiere darle al Evento: ")
                                                         continue
                                                 evento.cambiar_ubicacion(nueva_ubicacion)
+                                                break
                                 except Exception as e:
                                         raise KeyError("Error desconocido. Lo sentimos")
                         elif opciones == 4:
@@ -206,11 +207,15 @@ def modificar_evento():
                                         while True:
                                                 nuevo_aforo = input("Ingrese el nuevo aforo que quiere darle al Evento: ")
                                                 if nuevo_aforo == "":
-                                                        nuevo_aforo = input("Ingrese la nueva ubicación que quiere darle al Evento: ")
+                                                        nuevo_aforo = input("Ingrese el nuevo aforo que quiere darle al Evento: ")
                                                         continue
-                                                if nuevo_aforo < 0:
+                                                if not nuevo_aforo.isdigit():
+                                                        nuevo_aforo = input("No puede asignar un aforo menor a 0. Ingrese un aforo valido: ")
+                                                if int(nuevo_aforo) < 0:
                                                         nuevo_aforo = input("No puede asignar un aforo menor a 0. Ingrese un aforo valido: ")
                                                         continue
+                                                        continue
+                                                break
                                 except Exception as e:
                                         raise KeyError("Error desconocido. Lo sentimos")
                         elif opciones == 5:

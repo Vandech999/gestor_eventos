@@ -82,7 +82,7 @@ def menu_gestor_de_eventos():
         elif opcion == 2:
                 modificar_evento()
         elif opcion == 3:
-            eliminar_evento
+            eliminar_evento()
         elif opcion == 4:
             Gestor.listado_de_eventos()
         elif opcion == 5:
@@ -103,21 +103,19 @@ def premenu_gestor_eventos():
     max_intentos = 3
     codigo = "GeEvo01"
     con = True
-    while con == True:
+    while intentos < max_intentos:
         op = input("Ingrese código para poder ingresar al Gestor de Eventos: ")
         if op == "":
-            print("No puede ingresar un valor vacio.")
+            print("No puede ingresar un valor vacío.")
             continue
         if op == codigo:
-            con = False
             menu_gestor_de_eventos()
+            return
         else:
-            print(f"Código incorrecto. Intento {intentos} de {max_intentos}")
             intentos += 1
-            if intentos > max_intentos:
-                raise ValueError("Ha superado la cantidad de intentos permitidos. Cerrando el programa....")
-            con = False
-            break
+            print(f"Código incorrecto. Intento {intentos} de {max_intentos}")
+    print("Ha superado la cantidad de intentos permitidos. Cerrando el programa....")
+    raise ValueError("Acceso denegado")
 
 
 
@@ -125,26 +123,32 @@ def premenu_gestor_eventos():
 def iniciar_sesion():
     """
     Menú para iniciar sesión.
-    Se le pide al usuario que ingrese el codigo único que se le da a la hora de registrarse,
-    y luego tiene 3 intentos para ingresar su contraseña. En caso de fallar, se le devuelve al menu de usuarios,
-    si se procede con el inicio de sesión, se lo envia a la interfaz de usuarios.
+    Se le pide al usuario que ingrese el código único que se le da a la hora de registrarse,
+    y luego tiene 3 intentos para ingresar su contraseña. En caso de fallar, se le devuelve al menú de usuarios,
+    si se procede con el inicio de sesión, se lo envía a la interfaz de usuarios.
     """
-    intentos = 0
+    intentos_codigo = 0
     intentos_max = 3
-    checkear_codigo = input("Ingrese su codigo de Usuario: ")
-    if checkear_codigo not in usuarios:
-        print("Codigo invalido. Intente de nuevo.")
-    while intentos < intentos_max:
-        contraseña = input("ingrese su contraseña: ")
-        if contraseña == usuarios[checkear_codigo]["Contraseña"]:
-                print(f"Bienvenido {usuarios[checkear_codigo]['Usuario'].name}!")
+    while intentos_codigo < intentos_max:
+        checkear_codigo = input("Ingrese su código de Usuario: ")
+        if checkear_codigo not in usuarios:
+            intentos_codigo += 1
+            print(f"Código inválido. Intento {intentos_codigo} de {intentos_max}")
+            continue
+        intentos_contraseña = 0
+        while intentos_contraseña < intentos_max:
+            contraseña = input("Ingrese su contraseña: ")
+            if contraseña == usuarios[checkear_codigo]["Contraseña"]:
+                print(f"¡Bienvenido {usuarios[checkear_codigo]['Usuario'].name}!")
                 menu_loggeado(checkear_codigo)
                 return checkear_codigo
-        else:
-            intentos += 1
-            print(f"Contraseña incorrecta. Intento {intentos} de {intentos_max}")
-    print("Ha superado el número maximo de Intentos. Saliendo...")
-    menu_usuario()
+            else:
+                intentos_contraseña += 1
+                print(f"Contraseña incorrecta. Intento {intentos_contraseña} de {intentos_max}")
+        print("Ha superado el número máximo de intentos de contraseña. Volviendo al menú de usuarios.")
+        return  
+    print("Ha superado el número máximo de intentos de código. Saliendo...")
+    return 
 
 
 def registrarse():

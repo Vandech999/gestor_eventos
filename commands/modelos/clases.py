@@ -8,18 +8,18 @@ class GestorEventos:
         self.ID = "GeEv01"
         self._eventos = {}
         self._participantes = []
-    def agregar_evento(self,evento : object ):
-        if isinstance(evento, Evento):
-            self._eventos[evento.name] = {"Evento": evento}
+    def agregar_evento(self, evento: object):
+        if not isinstance(evento, Evento):
+            raise TypeError("Agregue un Evento válido.")
         if evento.nombre in self._eventos:
             print("Ya existe un evento con ese nombre.")
+            return
+        self._eventos[evento.nombre] = {"Evento": evento}
+    def eliminar_evento(self, nombre_evento: str):
+        if nombre_evento in self._eventos:
+            del self._eventos[nombre_evento]
         else:
-            raise TypeError("Agregue un Evento válido.")
-    def eliminar_evento(self,evento :object):
-        if isinstance(evento, Evento):
-            self._eventos.remove(evento)
-        else:
-            raise TypeError("No se ha podido eliminar el Evento")
+            print("Ese evento no existe.")
     def listado_de_eventos(self):
         return list(self._eventos.keys())
     def existe_evento(self,nombre):
@@ -52,7 +52,7 @@ class GestorEventos:
         encontrados = []
         for evento_info in self._eventos.values():
             evento = evento_info["Evento"]
-            if evento.date() >= date:
+            if  evento._date >= date:
                 encontrados.append(evento)
         if encontrados:
             for e in encontrados:
@@ -99,10 +99,6 @@ class Evento:
     @property
     def attendance(self):
         return self._attendance
-    @attendance.setter
-    def attendance(self):
-        if len(self.attendance) > self.max_participants:
-            raise ValueError("Se ha superado la cantidad maxima de asistentes posibles a este evento.")
     def sort_by_name(self):
         try:
             print(sorted(self.attendance, key= lambda p:p.name))
@@ -138,7 +134,7 @@ class Evento:
             writer = csv.writer(csv_file)
             writer.writerow(["Nombre","Edad","DNI","Email","¿Asistirá?"])
             for p in self.attendance:
-                writer.writerow([p.name,p.age,p.DNI,p.email, "Si" if p.attendance_confirmed else "No"])
+                writer.writerow([p.name,p.age,p.DNI,p.email, "Sí" if p._attendance_confirmed.get(self, False) else "No"])
 
 class Participante:
     def __init__(self,name : str, age: int, DNI : str, email : str, attendance_confirmed : dict|None = None, events_attended : list|None = None):
@@ -223,7 +219,7 @@ class Participante:
         if not self.events_attended:
             print("No estás anotado a ningún evento.")
             return
-        eventos_ordenados = sorted(self.events_attended, key= lambda evento: evento.location.lower())
+        eventos_ordenados = sorted(self.events_attended, key= lambda evento: evento._location.lower())
         for evento in eventos_ordenados:
             print(f"{evento.nombre} - Ubicación: {evento.location}")
     def sort_events_by_max_participants(self):
