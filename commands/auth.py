@@ -52,11 +52,11 @@ def auth_registrarse():
                 codigo = "".join(random.choices("0123456789", k=7))
                 if codigo not in usuarios:
                         break
-        Usuario = Participante(name,edad,DNI,email, None,None)
+        usuario = Participante(name,edad,DNI,email, None,None)
         print(f"Usuario generado con exito! Su codigo de usuario es: {codigo} ")
-        usuarios[codigo] = {"Usuario": Usuario.to_dict(), "Contraseña":contraseña}
-        dict_email[Usuario.email] = Usuario
-        dict_DNI[Usuario.DNI] = Usuario
+        usuarios[codigo] = {"Usuario": usuario.to_dict(), "Contraseña":contraseña}
+        dict_email[usuario.email] = usuario
+        dict_DNI[usuario.DNI] = usuario
         guardar_usuarios_en_json(usuarios)
         return "Registro finalizado! Redirigiendo..."
 
